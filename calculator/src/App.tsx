@@ -5,6 +5,9 @@ import Screen from './components/Screen';
 import './App.css';
 import ButtonBox from './components/ButtonBox';
 import Button from './components/Button';
+import { calculate } from './store/actions/calculate';
+import * as fromCalculator from './store';
+import { connect } from 'react-redux';
 
 const buttonValues = [
   "C", "+-", "%", "/",
@@ -14,16 +17,31 @@ const buttonValues = [
   "↔", 0, ".", "=",
 ];
 
+const mapStateToProps = (state: { calculator: { expression: any; total: any; }; }) => {
+  return {
+    expression: fromCalculator.getExpression(state),
+    total: fromCalculator.getTotal(state)
+  }
+}
+
+const mapDispatchToProps = (dispatch: (arg0: { type: string; payload: string; }) => void) => {
+  return {
+    calculate: (buttonKey: string) => {
+      dispatch(calculate(buttonKey))
+    },
+  }
+}
+
 function App() {
   return (
     <div className="App">
       <header className="App-header">
         <Wrapper>
-          <Screen value="0" />
+          <Screen expression="0" total="0" />
           <ButtonBox>
             {
               buttonValues.map((button) =>
-                <Button key={button} className={button == "=" ? "equals" : ""} value={button}
+                <Button key={button} className={button === "=" ? "equals" : ""} value={button}
                   onClick={() => {
                     console.log(`${button} clicked!`);
                   }} />
@@ -35,4 +53,7 @@ function App() {
   );
 }
 
-export default App;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);

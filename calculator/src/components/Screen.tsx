@@ -1,19 +1,30 @@
 import "./Screen.scss";
+import { Textfit } from 'react-textfit';
 
 type ScreenProps = {
-    value: React.ReactNode;
+    expression: string;
+    total: string;
 }
 
 const Screen = (
     {
-        value
+        expression, total
     }: ScreenProps
 ) => {
     return (
         <div className="screen-wrapper">
             <div>Calculator</div>
             <div className="screen">
-                {value}
+                <Textfit max={40} throttle={60} mode="single" className="screen-top">
+                    {expression}
+                </Textfit>
+                <Textfit
+                    max={150}
+                    mode="single"
+                    className="screen-bottom"
+                >
+                    {total}
+                </Textfit>
             </div>
         </div>
     );
