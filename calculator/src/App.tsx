@@ -10,12 +10,14 @@ import * as fromCalculator from './store';
 import { connect } from 'react-redux';
 
 const buttonValues = [
-  "C", "+-", "%", "/",
+  "C", "del", "%", "/",
   7, 8, 9, "x",
   4, 5, 6, "-",
   1, 2, 3, "+",
   "↔", 0, ".", "=",
 ];
+
+const mathOperators = ["/", "x", "-", "+"];
 
 const mapStateToProps = (state: { calculator: { expression: any; total: any; }; }) => {
   return {
@@ -40,8 +42,8 @@ function App() {
           <Screen expression="0" total="0" />
           <ButtonBox>
             {
-              buttonValues.map((button) =>
-                <Button key={button} className={button === "=" ? "equals" : ""} value={button}
+              buttonValues.map((button, index) =>
+                <Button key={button} className={(button === "=" ? "equals" : "") + " " + (mathOperators.includes(`${button}`) ? 'math-operator' : '')} value={button}
                   onClick={() => {
                     console.log(`${button} clicked!`);
                   }} />
